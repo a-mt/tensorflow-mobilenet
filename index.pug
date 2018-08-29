@@ -1,0 +1,65 @@
+doctype
+html
+  head
+    meta(charset="UTF-8")
+    title Image Classifier Demo
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700")
+    link(rel="stylesheet" href="/public/main.css")
+    script.
+      window.onload = function(){
+        var aRadio = document.querySelectorAll('input[type="radio"]');
+        for(var i=0; i<aRadio.length; i++) {
+          aRadio[i].addEventListener("click", submitForm);
+        }
+        img0.addEventListener("change", submitForm);
+
+        function submitForm() {
+          form.submit();
+        }
+      }
+
+  body.container
+    h1 Image Classifier Demo
+
+    if err
+      div(class="alert alert-danger")= err
+
+    .panels
+      .panel
+        .title Select Image
+
+        form(id="form" enctype="multipart/form-data" method="post" action="/submit")
+          input(type="radio" id="img1" name="img" value="apple" class="radio hidden")
+          label.preloadedImageButton(style="background-image: url('/public/apple.jpg')" for="img1")
+  
+          input(type="radio" id="img2" name="img" value="airplane" class="radio hidden")
+          label.preloadedImageButton(style="background-image: url('/public/airplane.jpg')" for="img2")
+  
+          input(type="radio" id="img3" name="img" value="baseball" class="radio hidden")
+          label.preloadedImageButton(style="background-image: url('/public/baseball.jpg')"  for="img3")
+  
+          input(type="radio" id="img4" name="img" value="burger" class="radio hidden")
+          label.preloadedImageButton(style="background-image: url('/public/burger.jpg')" for="img4")
+  
+          input(type="radio" id="img5" name="img" value="dog" class="radio hidden")
+          label.preloadedImageButton(style="background-image: url('/public/dog.jpg')" for="img5")
+  
+          br
+          label(for="img0") Or upload your own
+          input(type="file" id="img0" name="file")
+
+      .panel
+        .title Image
+        if img
+          img(style="border: 1px solid #ccc" src!="data:image/jpeg;base64," + img)
+      .panel
+        .title Results
+        if predicted
+          table
+            tr
+              th.label Label
+              th.value Probability
+            each p in predicted
+              tr
+                td.label= p.label
+                td.value= (p.value*100).toFixed(2) + '%'
